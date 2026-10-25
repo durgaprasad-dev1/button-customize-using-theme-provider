@@ -1,10 +1,80 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════
+   THEME VARIABLES
+   Light & dark palettes controlled by next-themes
+   (.dark class on <html>)
+   ═══════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Page */
+  --background: #f4f5f9;
+  --foreground: #1a1a2e;
+  --surface: #ffffff;
+  --surface-hover: #eef0f5;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.14);
+  --text-primary: #1a1a2e;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --accent: #6366f1;
+
+  /* ── Style-specific colors (light) ────────── */
+
+  /* Rounded */
+  --style-rounded-bg: #6366f1;
+  --style-rounded-shadow: rgba(99, 102, 241, 0.35);
+
+  /* Bordered */
+  --style-bordered-color: #6366f1;
+
+  /* Gradient Glow */
+  --style-gradient-bg: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+  --style-gradient-shadow: rgba(139, 92, 246, 0.4);
+
+  /* Glass */
+  --style-glass-bg: rgba(255, 255, 255, 0.55);
+  --style-glass-color: #1a1a2e;
+  --style-glass-border: rgba(255, 255, 255, 0.6);
+  --style-glass-shadow: rgba(0, 0, 0, 0.06);
 }
 
+.dark {
+  /* Page */
+  --background: #0b0b18;
+  --foreground: #e2e8f0;
+  --surface: #13132a;
+  --surface-hover: #1c1c3a;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent: #818cf8;
+
+  /* ── Style-specific colors (dark) ─────────── */
+
+  /* Rounded */
+  --style-rounded-bg: #818cf8;
+  --style-rounded-shadow: rgba(129, 140, 248, 0.3);
+
+  /* Bordered */
+  --style-bordered-color: #818cf8;
+
+  /* Gradient Glow */
+  --style-gradient-bg: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+  --style-gradient-shadow: rgba(192, 132, 252, 0.35);
+
+  /* Glass */
+  --style-glass-bg: rgba(19, 19, 42, 0.6);
+  --style-glass-color: #f1f5f9;
+  --style-glass-border: rgba(255, 255, 255, 0.1);
+  --style-glass-shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* ═══════════════════════════════════════════════
+   TAILWIND THEME BRIDGE
+   ═══════════════════════════════════════════════ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,15 +82,90 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ═══════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════ */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+   Used by style classes in buttonStyles.ts
+   ═══════════════════════════════════════════════ */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+@keyframes orbDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(40px, -30px) scale(1.08); }
+}
+
+@keyframes orbDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-35px, 25px) scale(0.92); }
+}
+
+/* Utility classes */
+.animate-gradient-bg {
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   BACKGROUND ORBS
+   ═══════════════════════════════════════════════ */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.25;
+}
+.dark .orb { opacity: 0.12; }
+
+.orb-1 {
+  width: 420px; height: 420px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  top: -80px; left: -60px;
+  animation: orbDrift1 22s ease-in-out infinite;
+}
+.orb-2 {
+  width: 350px; height: 350px;
+  background: linear-gradient(135deg, #ec4899, #f59e0b);
+  bottom: -60px; right: -40px;
+  animation: orbDrift2 26s ease-in-out infinite;
 }
